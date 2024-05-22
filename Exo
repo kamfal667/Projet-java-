@@ -1,0 +1,95 @@
+
+import java.util.Map;
+import java.util.Scanner;
+
+public class RegionsQuiz {
+    private static final Map<String, String> REGIONS_CHEFS_LIEUX = new HashMap<>();
+    private static final int NUM_QUESTIONS = 10;
+    private static final int[] TOP_5_SCORES = new int[5];
+
+    static {
+        REGIONS_CHEFS_LIEUX.put("Agnéby-Tiassa", "Agboville");
+        REGIONS_CHEFS_LIEUX.put("Bafing", "Touba");
+        REGIONS_CHEFS_LIEUX.put("Béré", "Boundiali");
+        REGIONS_CHEFS_LIEUX.put("Bounkani", "Bouna");
+        REGIONS_CHEFS_LIEUX.put("Cavally", "Guiglo");
+        REGIONS_CHEFS_LIEUX.put("Gbêkê", "Bouaké");
+        REGIONS_CHEFS_LIEUX.put("Gôh ", "Gagnoa");
+        REGIONS_CHEFS_LIEUX.put("Guémon ", "Bangolo");
+        REGIONS_CHEFS_LIEUX.put("Hambol ", "Katiola");
+        REGIONS_CHEFS_LIEUX.put("l'Iffou ", "Daoukro");
+        REGIONS_CHEFS_LIEUX.put("Indénié-Djuablin ", "Abengourou");
+        REGIONS_CHEFS_LIEUX.put("Kabadougou ", "Minignan");
+        REGIONS_CHEFS_LIEUX.put("Lacs  ", "Yamoussoukro");
+        REGIONS_CHEFS_LIEUX.put("Loh-Djiboua ", "Divo");
+        REGIONS_CHEFS_LIEUX.put("Marahoué  ", "Bouaflé");
+        REGIONS_CHEFS_LIEUX.put("Moronou  ", "Bongouanou");
+        REGIONS_CHEFS_LIEUX.put("N'Zi", "Dimbokro");
+        REGIONS_CHEFS_LIEUX.put("la Nawa", "Soubré");
+        REGIONS_CHEFS_LIEUX.put("Poro ", "Korhogo");
+        REGIONS_CHEFS_LIEUX.put("San-Pédro ", "San-Pédro");
+        REGIONS_CHEFS_LIEUX.put("Sud-Comoé ", "Aboisso");
+        REGIONS_CHEFS_LIEUX.put("Sud-Bandama ", "Grand-Lahou ");
+        REGIONS_CHEFS_LIEUX.put("Tchologo  ", "Ferkessédougou");
+        REGIONS_CHEFS_LIEUX.put("Tonkpi  ", "Man");
+        REGIONS_CHEFS_LIEUX.put("Vavoua  ", "Vavoua");
+        REGIONS_CHEFS_LIEUX.put("Worodougou ", "Séguéla");
+        REGIONS_CHEFS_LIEUX.put("la Vallée du Bandama  ", "Kong");
+        REGIONS_CHEFS_LIEUX.put("Haut-Sassandra ", "Daloa");
+        REGIONS_CHEFS_LIEUX.put("des Grands Ponts ", "Dabou");
+        REGIONS_CHEFS_LIEUX.put("Zanzan ", "Bondoukou");
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        boolean playAgain = true;
+        while (playAgain) {
+            System.out.print("Entrez votre surnom : ");
+            String playerName = scanner.nextLine();
+
+            int score = 0;
+            for (int i = 0; i < NUM_QUESTIONS; i++) {
+                String region = getRandomRegion();
+                System.out.printf("Quel est le chef-lieu de la région %s ? ", region);
+                String answer = scanner.nextLine();
+                if (answer.equalsIgnoreCase(REGIONS_CHEFS_LIEUX.get(region))) {
+                    System.out.println("Bonne réponse !");
+                    score++;
+                } else {
+                    System.out.printf("Mauvaise réponse. La bonne réponse est %s.%n", REGIONS_CHEFS_LIEUX.get(region));
+                    break;
+                }
+            }
+
+            System.out.printf("%nVotre score est de %d/%d.%n", score, NUM_QUESTIONS);
+            updateTopScores(playerName, score);
+            System.out.println("Voici les 5 meilleurs scores :");
+            for (int i = 0; i < 5; i++) {
+                System.out.printf("%d. %d points%n", i + 1, TOP_5_SCORES[i]);
+            }
+
+            System.out.print("Voulez-vous rejouer ? (oui/non) ");
+            String response = scanner.nextLine();
+            playAgain = response.equalsIgnoreCase("oui");
+        }
+    }
+
+    private static String getRandomRegion() {
+        int randomIndex = (int) (Math.random() * REGIONS_CHEFS_LIEUX.size());
+        return (String) REGIONS_CHEFS_LIEUX.keySet().toArray()[randomIndex];
+    }
+
+    private static void updateTopScores(String playerName, int score) {
+        for (int i = 0; i < 5; i++) {
+            if (score > TOP_5_SCORES[i]) {
+                for (int j = 4; j > i; j--) {
+                    TOP_5_SCORES[j] = TOP_5_SCORES[j-1];
+                }
+                TOP_5_SCORES[i] = score;
+                System.out.printf("Félicitations %s, vous avez le %dème meilleur score !%n", playerName, i + 1);
+                return;
+            }
+        }
+    }
+}
+Les modifications apportées sont :1.Ajout d'une boucle while autour du code principal du quiz, qui permet de le relancer si l'utilisateur le souhaite.2.Ajout d'une question à la fin du quiz demandant à l'utilisateur s'il souhaite rejouer, avec une condition playAgain pour continuer ou arrêter la boucle.Désormais, lorsque l'utilisateur termine le quiz, le programme lui demandera s'il souhaite rejouer. S'il répond "oui", le quiz sera relancé. Sinon, le programme se terminera.
